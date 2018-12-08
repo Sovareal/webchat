@@ -16,30 +16,29 @@ public class ChatUserDataService {
 
     private ChatUserRepository chatUserRepository;
 
-    public ChatUserDataService(ChatUserRepository chatUserRepository){
+    public ChatUserDataService(ChatUserRepository chatUserRepository) {
         this.chatUserRepository = chatUserRepository;
     }
 
-    public ChatUser createUser(ChatUser chatUser){
+    public ChatUser createUser(ChatUser chatUser) {
         chatUser.setLastVisit(new Date());
         ChatUser dataBaseChatUser = chatUserRepository.findByLogin(chatUser.getLogin());
-        if(dataBaseChatUser != null){
+        if (dataBaseChatUser != null) {
 
             throw new AlreadyExistException("Login already exists");
-
         }
 
         return chatUserRepository.save(chatUser);
     }
 
-    public List<ChatUser> getAllUsers(){
+    public List<ChatUser> getAllUsers() {
         return chatUserRepository.findAll()
                 .stream()
                 .filter(entity -> notAdmin(entity.getLogin()))
                 .collect(Collectors.toList());
     }
 
-    private boolean notAdmin(String login){
+    private boolean notAdmin(String login) {
         //todo
         return false;
     }
